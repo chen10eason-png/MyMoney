@@ -1,141 +1,15 @@
-<!DOCTYPE html>
-<html lang="zh-Hant">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#f3f5f8" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-  <meta name="apple-mobile-web-app-title" content="MyMoney" />
-  <link rel="manifest" href="manifest.webmanifest" />
-  <link rel="apple-touch-icon" href="icon-192.svg" />
-  <link rel="stylesheet" href="styles.css" />
-  <title>MyMoney 記帳</title>
-</head>
-<body>
-  <main id="app">
-    <section class="view active" id="homeView">
-      <header class="topbar">
-        <div>
-          <div class="eyebrow" id="monthLabel"></div>
-          <h1>我的帳本</h1>
-        </div>
-        <button class="avatar-btn" data-nav="accounts" aria-label="帳戶">◈</button>
-      </header>
-
-      <section class="hero-card">
-        <div class="hero-row">
-          <div>
-            <div class="muted">本月可用餘額</div>
-            <div class="hero-amount" id="balanceAmount">$0</div>
-          </div>
-          <div class="mini-stats">
-            <div><span>收入</span><strong id="incomeAmount">$0</strong></div>
-            <div><span>支出</span><strong id="expenseAmount">$0</strong></div>
-          </div>
-        </div>
-        <div class="budget-wrap">
-          <div class="budget-line"><span>本月預算</span><span id="budgetText">尚未設定</span></div>
-          <div class="progress"><div id="budgetProgress"></div></div>
-        </div>
-      </section>
-
-      <section class="quick-actions"><button id="quickAddTop"><span class="qa-icon">＋</span><span>記一筆</span></button><button data-nav="accounts"><span class="qa-icon">▣</span><span>帳戶</span></button><button data-nav="analytics"><span class="qa-icon">⌁</span><span>分析</span></button></section>
-
-      <section class="section-head"><h2>今天</h2><span id="todayTotal">$0</span></section>
-      <div class="list" id="todayList"></div>
-
-      <section class="section-head"><h2>最近紀錄</h2><button class="text-btn" data-nav="records">查看全部</button></section>
-      <div class="list" id="recentList"></div>
-    </section>
-
-    <section class="view" id="recordsView">
-      <header class="topbar"><div><div class="eyebrow">全部紀錄</div><h1>明細</h1></div></header>
-      <div class="filter-row">
-        <select id="recordTypeFilter"><option value="all">全部</option><option value="expense">支出</option><option value="income">收入</option><option value="transfer">轉帳</option></select>
-        <input id="recordSearch" type="search" placeholder="搜尋備註、分類、帳戶" />
-      </div>
-      <div class="list" id="recordsList"></div>
-    </section>
-
-    <section class="view" id="analyticsView">
-      <header class="topbar"><div><div class="eyebrow">本月分析</div><h1>分析</h1></div></header>
-      <section class="metric-grid">
-        <div class="metric"><span>本月支出</span><strong id="analyticsExpense">$0</strong></div>
-        <div class="metric"><span>日均支出</span><strong id="dailyAvg">$0</strong></div>
-        <div class="metric"><span>最大單筆</span><strong id="largestExpense">$0</strong></div>
-        <div class="metric"><span>交易筆數</span><strong id="txCount">0</strong></div>
-      </section>
-      <section class="card-block">
-        <div class="section-head"><h2>分類占比</h2></div>
-        <div id="categoryBreakdown"></div>
-      </section>
-      <section class="card-block">
-        <div class="section-head"><h2>近 7 天支出</h2></div>
-        <div class="bars" id="weekBars"></div>
-      </section>
-    </section>
-
-    <section class="view" id="accountsView">
-      <header class="topbar"><div><div class="eyebrow">資金來源</div><h1>帳戶</h1></div><button class="icon-btn" id="addAccountBtn">＋</button></header>
-      <div class="list" id="accountsList"></div>
-    </section>
-
-    <section class="view" id="settingsView">
-      <header class="topbar"><div><div class="eyebrow">偏好設定</div><h1>設定</h1></div></header>
-      <div class="settings-card">
-        <label>每月預算<input id="monthlyBudget" type="number" inputmode="decimal" placeholder="例如 20000" /></label>
-        <button class="primary-btn" id="saveBudgetBtn">儲存預算</button>
-      </div>
-      <div class="settings-card">
-        <button class="row-btn" id="exportBtn">匯出備份 JSON <span>›</span></button>
-        <label class="row-btn file-label">匯入備份 JSON <span>›</span><input id="importInput" type="file" accept="application/json" hidden /></label>
-      </div>
-      <div class="settings-card danger-zone">
-        <button class="row-btn danger" id="clearDataBtn">清除全部資料 <span>›</span></button>
-      </div>
-      <p class="version">MyMoney V1.1.0 · 資料儲存在此裝置</p>
-    </section>
-  </main>
-
-  <nav class="bottom-nav">
-    <button class="nav-btn active" data-nav="home"><b>⌂</b><span>首頁</span></button>
-    <button class="nav-btn" data-nav="records"><b>☷</b><span>明細</span></button>
-    <button class="fab" id="fabAdd" aria-label="記一筆">＋</button>
-    <button class="nav-btn" data-nav="analytics"><b>⌁</b><span>分析</span></button>
-    <button class="nav-btn" data-nav="settings"><b>⚙</b><span>設定</span></button>
-  </nav>
-
-  <div class="sheet-backdrop" id="sheetBackdrop"></div>
-  <section class="sheet" id="entrySheet" aria-hidden="true">
-    <div class="sheet-handle"></div>
-    <div class="segmented" id="typeSegment">
-      <button data-type="expense" class="active">支出</button>
-      <button data-type="income">收入</button>
-      <button data-type="transfer">轉帳</button>
-    </div>
-    <input id="amountInput" class="amount-input" type="number" inputmode="decimal" placeholder="$0" />
-    <div class="field-grid">
-      <label>分類<select id="categorySelect"></select></label>
-      <label>帳戶<select id="accountSelect"></select></label>
-      <label>日期<input id="dateInput" type="date" /></label>
-      <label>時間<input id="timeInput" type="time" /></label>
-    </div>
-    <label class="full-field">備註<input id="noteInput" type="text" placeholder="例如 午餐、捷運、薪水" /></label>
-    <button class="primary-btn" id="saveEntryBtn">完成記帳</button>
-  </section>
-
-  <section class="modal" id="accountModal" aria-hidden="true">
-    <div class="modal-card">
-      <h3>新增帳戶</h3>
-      <input id="newAccountName" type="text" placeholder="帳戶名稱，例如 台新信用卡" />
-      <select id="newAccountType">
-        <option value="現金">現金</option><option value="銀行">銀行</option><option value="信用卡">信用卡</option><option value="電子支付">電子支付</option><option value="其他">其他</option>
-      </select>
-      <div class="modal-actions"><button class="secondary-btn" id="cancelAccount">取消</button><button class="primary-btn" id="saveAccount">新增</button></div>
-    </div>
-  </section>
-
-  <script src="app.js"></script>
-</body>
-</html>
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no"><meta name="theme-color" content="#f7f7f4"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="MyMoney"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icon-192.png"><link rel="stylesheet" href="styles.css"><title>MyMoney 2.0</title></head><body><div id="app">
+<header class="app-head"><div><span class="eyebrow" id="hello">MYMONEY</span><h1 id="pageTitle">總覽</h1></div><button class="round" id="settingsBtn">⚙︎</button></header>
+<main>
+<section class="view active" id="homeView"><div class="balance-card"><div class="balance-top"><div><span>本月剩餘</span><strong id="monthRemaining">$0</strong></div><button class="month-pill" id="monthPill"></button></div><div class="money-row"><div><span>收入</span><b id="homeIncome">$0</b></div><div><span>支出</span><b id="homeExpense">$0</b></div></div><div class="budget-line"><div><span>預算使用</span><b id="budgetPct">—</b></div><div class="track"><i id="budgetBar"></i></div></div></div>
+<div class="quick"><button id="quickExpense"><i>−</i><span>支出</span></button><button id="quickIncome"><i>＋</i><span>收入</span></button><button id="quickTransfer"><i>⇄</i><span>轉帳</span></button><button data-go="accounts"><i>▣</i><span>帳戶</span></button></div>
+<div class="section-title"><h2>今日</h2><b id="todaySum">$0</b></div><div id="todayList" class="tx-list"></div><div class="section-title"><h2>最近交易</h2><button data-go="records">全部</button></div><div id="recentList" class="tx-list"></div></section>
+<section class="view" id="recordsView"><div class="toolbar"><div class="seg"><button class="active" data-filter="all">全部</button><button data-filter="expense">支出</button><button data-filter="income">收入</button></div><input id="search" placeholder="搜尋交易、分類或帳戶"></div><div id="recordsList" class="tx-list roomy"></div></section>
+<section class="view" id="budgetView"><div class="summary-card"><span>本月總預算</span><strong id="budgetTotal">$0</strong><p id="budgetRemainText">尚未設定預算</p></div><div class="section-title"><h2>分類預算</h2><button id="editBudgets">編輯</button></div><div id="categoryBudgets" class="budget-list"></div><div class="section-title"><h2>固定收支</h2><button id="addRecurring">新增</button></div><div id="recurringList" class="tx-list"></div></section>
+<section class="view" id="accountsView"><div class="net-card"><span>淨資產</span><strong id="netWorth">$0</strong><div><small>資產 <b id="assetTotal">$0</b></small><small>信用卡 <b id="debtTotal">$0</b></small></div></div><div class="section-title"><h2>我的帳戶</h2><button id="addAccount">新增</button></div><div id="accountsList" class="account-list"></div><div class="section-title"><h2>本月分析</h2></div><div class="analytics"><div><span>日均支出</span><b id="avgExpense">$0</b></div><div><span>最大單筆</span><b id="maxExpense">$0</b></div><div class="wide"><span>支出分類</span><div id="categoryChart"></div></div></div></section>
+<section class="view" id="settingsView"><div class="settings-group"><h3>記帳</h3><label>每月總預算 <input id="monthlyBudget" type="number" inputmode="decimal" placeholder="例如 20000"></label><button id="saveSettings">儲存設定</button></div><div class="settings-group"><h3>資料</h3><button id="exportJson">匯出 JSON 備份 <span>›</span></button><button id="exportCsv">匯出 CSV <span>›</span></button><label class="import">匯入 JSON 備份 <span>›</span><input id="importJson" type="file" accept="application/json" hidden></label></div><div class="settings-group"><h3>外觀</h3><button id="themeBtn">切換深色模式 <span>◐</span></button></div><div class="settings-group"><button class="danger" id="clearAll">清除全部資料</button></div><p class="version">MyMoney 2.0.0 · 本機優先 · 無需登入</p></section>
+</main>
+<nav><button class="active" data-go="home"><i>⌂</i><span>總覽</span></button><button data-go="records"><i>☷</i><span>明細</span></button><button class="add" id="mainAdd">＋</button><button data-go="budget"><i>◎</i><span>預算</span></button><button data-go="accounts"><i>▣</i><span>資產</span></button></nav>
+<div class="backdrop" id="backdrop"></div><section class="sheet" id="entrySheet"><div class="handle"></div><div class="sheet-head"><button id="closeEntry">取消</button><b id="entryTitle">新增支出</b><button id="saveEntry">儲存</button></div><div class="type-tabs"><button data-type="expense" class="active">支出</button><button data-type="income">收入</button><button data-type="transfer">轉帳</button></div><div class="amount-wrap"><span>NT$</span><input id="amount" inputmode="decimal" placeholder="0"></div><div class="cat-grid" id="categoryGrid"></div><div class="form"><label><span>帳戶</span><select id="account"></select></label><label id="toAccountRow" class="hidden"><span>轉入</span><select id="toAccount"></select></label><label><span>日期</span><input id="date" type="date"></label><label><span>備註</span><input id="note" placeholder="商家、用途或備註"></label></div></section>
+<div class="modal" id="accountModal"><div class="modal-card"><h2>新增帳戶</h2><input id="accountName" placeholder="帳戶名稱"><select id="accountType"><option>現金</option><option>銀行</option><option>信用卡</option><option>電子支付</option><option>其他</option></select><input id="openingBalance" type="number" inputmode="decimal" placeholder="目前餘額 / 信用卡未繳金額"><div><button id="cancelAccount">取消</button><button id="confirmAccount">新增</button></div></div></div>
+<div class="toast" id="toast"></div></div><script src="app.js"></script></body></html>

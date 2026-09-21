@@ -1,17 +1,5 @@
-# MyMoney V1
+# MyMoney 2.0
 
-手機優先的 PWA 記帳 App。
+手機優先的本機記帳 PWA。直接部署整個資料夾到 GitHub Pages 即可。
 
-## 功能
-- 支出 / 收入 / 轉帳
-- 類別與帳戶
-- 本月收入、支出、結餘
-- 每月預算
-- 明細搜尋與篩選
-- 分類分析與近 7 天支出圖
-- 本機資料保存
-- JSON 匯出 / 匯入備份
-- PWA 離線與加入主畫面
-
-## GitHub Pages
-將所有檔案放到 repository 根目錄，Settings → Pages → Deploy from a branch → main / root。
+目前功能：支出/收入/轉帳、多帳戶、信用卡帳戶、總預算與分類預算、明細搜尋、資產總覽、分析、JSON/CSV 匯出、JSON 還原、深色模式、離線 PWA。
