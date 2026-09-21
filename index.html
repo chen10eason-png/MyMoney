@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#f6f7f9" />
+  <meta name="theme-color" content="#f3f5f8" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="MyMoney" />
@@ -18,15 +18,15 @@
       <header class="topbar">
         <div>
           <div class="eyebrow" id="monthLabel"></div>
-          <h1>MyMoney</h1>
+          <h1>我的帳本</h1>
         </div>
-        <button class="icon-btn" id="quickAddTop" aria-label="快速記帳">＋</button>
+        <button class="avatar-btn" data-nav="accounts" aria-label="帳戶">◈</button>
       </header>
 
       <section class="hero-card">
         <div class="hero-row">
           <div>
-            <div class="muted">本月結餘</div>
+            <div class="muted">本月可用餘額</div>
             <div class="hero-amount" id="balanceAmount">$0</div>
           </div>
           <div class="mini-stats">
@@ -39,6 +39,8 @@
           <div class="progress"><div id="budgetProgress"></div></div>
         </div>
       </section>
+
+      <section class="quick-actions"><button id="quickAddTop"><span class="qa-icon">＋</span><span>記一筆</span></button><button data-nav="accounts"><span class="qa-icon">▣</span><span>帳戶</span></button><button data-nav="analytics"><span class="qa-icon">⌁</span><span>分析</span></button></section>
 
       <section class="section-head"><h2>今天</h2><span id="todayTotal">$0</span></section>
       <div class="list" id="todayList"></div>
@@ -92,16 +94,16 @@
       <div class="settings-card danger-zone">
         <button class="row-btn danger" id="clearDataBtn">清除全部資料 <span>›</span></button>
       </div>
-      <p class="version">MyMoney V1.0.0 · 資料儲存在此裝置</p>
+      <p class="version">MyMoney V1.1.0 · 資料儲存在此裝置</p>
     </section>
   </main>
 
   <nav class="bottom-nav">
-    <button class="nav-btn active" data-nav="home">⌂<span>首頁</span></button>
-    <button class="nav-btn" data-nav="records">☷<span>明細</span></button>
-    <button class="fab" id="fabAdd">＋</button>
-    <button class="nav-btn" data-nav="analytics">⌁<span>分析</span></button>
-    <button class="nav-btn" data-nav="settings">⚙<span>設定</span></button>
+    <button class="nav-btn active" data-nav="home"><b>⌂</b><span>首頁</span></button>
+    <button class="nav-btn" data-nav="records"><b>☷</b><span>明細</span></button>
+    <button class="fab" id="fabAdd" aria-label="記一筆">＋</button>
+    <button class="nav-btn" data-nav="analytics"><b>⌁</b><span>分析</span></button>
+    <button class="nav-btn" data-nav="settings"><b>⚙</b><span>設定</span></button>
   </nav>
 
   <div class="sheet-backdrop" id="sheetBackdrop"></div>
